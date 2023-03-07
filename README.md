@@ -237,7 +237,33 @@ You can test it by running the image:
 ```
 docker run -d -p 80:80 <username/repo>
 ```
+## Building an image for the node app
 
+- Create a new directory called `nodejs`
+- Inside the directory make a new `Dockerfile`
+- Copy your app file into your `nodejs` directory
+- Enter the following code into your docker file (VScode):
+
+```
+FROM node:latest
+
+LABEL MAINTAINER=abubakarhs123@gmail.com
+
+WORKDIR /usr/src/app
+
+COPY app /usr/src/app/
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+- Test  to see if the app runs properly and if it does you will need to tag the image and push it to docker hub
+
+- **Note** make sure you start/ push the image from the right directory `nodejs`
 
 
 
