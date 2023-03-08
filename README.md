@@ -74,6 +74,36 @@ Docker architecture consists of several components that work together to enable 
 
 Docker also provides a RESTful API that allows developers to interact with the Docker daemon programmatically. The Docker API provides endpoints for managing containers, images, networks, volumes, and other Docker objects. Developers can use the Docker API to build custom tools and integrations that interact with the Docker daemon. The Docker API is also used by popular container orchestration platforms, such as Kubernetes and Docker Swarm, to manage containers at scale.
 
+## Docker port mapping
+
+Docker port mapping (also known as port forwarding) is a technique used to map network ports on a Docker container to specific ports on the host machine. This allows the container to be accessible from the host machine or from other machines on the network.
+
+Docker containers run in isolation from the host machine, and they have their own IP address and network stack. By default, containers cannot communicate with the outside world. Port mapping enables containers to expose specific ports to the host machine, making it possible to access them from the host or other machines on the network.
+
+To perform port mapping, you can use the `-p` or `--publish` option when running a container with the `docker run` command. This option takes two arguments: the first is the host port, and the second is the container port. For example, to map port 80 in a container to port 8080 on the host machine, you can use the following command:
+
+```
+docker run -p 8080:80 my_container
+```
+
+## Container lifecycle 
+
+The lifecycle of a container in Docker can be broken down into four primary stages: create, start, stop, and delete.
+
+Create:
+The first stage in the container lifecycle is the creation of the container. This involves creating a new container image or pulling an existing image from a registry. When creating a new container, you can specify various configuration options such as the image name, container name, environment variables, ports to expose, volumes to mount, and more.
+
+- Start:
+After creating the container, you can start it using the `docker start` command. This initializes the container's runtime environment and launches the processes specified in the container image. The container then runs in the background and can be accessed through the exposed ports or by using the `docker exec` command to execute commands inside the container.
+
+- Stop:
+When you're finished with a container, you can stop it using the `docker stop` command. This sends a signal to the container to gracefully stop its processes and shut down. Alternatively, you can use the `docker kill` command to forcefully stop the container's processes. When a container is stopped, it retains its state, including any changes made to its filesystem or data stored in its volumes.
+
+- Delete:
+Finally, when you no longer need a container, you can delete it using the `docker rm` command. This removes the container and its associated filesystem, volumes, and network resources. Note that deleting a container does not delete the underlying image; you can still use the image to create new containers.
+
+- It's important to note that containers are designed to be ephemeral, meaning they should be disposable and easily recreated. This is in contrast to traditional virtual machines, which are typically long-lived and stateful. By designing applications to be containerized and ephemeral, you can take advantage of the benefits of containerization, such as fast startup times, easy deployment, and scalability.
+
 ## Docker commands
 
 ```
