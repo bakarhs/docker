@@ -295,7 +295,16 @@ CMD ["npm", "start"]
 
 - **Note** make sure you start/ push the image from the right directory `nodejs`
 
+## Building a docker container on EC2
 
+- Create a an EC2 instance with the correct dependancies
+
+```
+sudo apt update
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo docker run -d -p 3000:3000 <username>/<repo>:<tag>
+```
 
 
 
