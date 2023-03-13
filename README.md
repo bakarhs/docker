@@ -298,7 +298,9 @@ CMD ["npm", "start"]
 ## Building a docker container on EC2
 
 - Create a an EC2 instance with the correct dependancies
+- Make sure to allow ports 22,80,3000
 
+- Commands needed to install docker in ec2 and run a container.
 ```
 sudo apt update
 curl -fsSL https://get.docker.com -o get-docker.sh
