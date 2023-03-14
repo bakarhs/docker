@@ -308,5 +308,112 @@ sudo sh get-docker.sh
 sudo docker run -d -p 3000:3000 <username>/<repo>:<tag>
 ```
 
+# Docker compose
 
+Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to define your application's services, networks, and volumes in a single YAML file, and then spin up your entire application stack with a single command.
 
+With Docker Compose, you can define multiple containers, their dependencies, and configure how they communicate with each other. This makes it easy to manage complex applications that require multiple containers to run together.
+
+Docker Compose also allows you to specify environment variables, volumes, ports, and other settings for your containers. You can also scale your services up or down to handle changes in traffic or demand.
+
+Overall, Docker Compose simplifies the process of deploying and managing complex multi-container applications, making it a popular tool among developers and DevOps teams.
+
+docker-compose.yml file for sparta app
+
+```YAML
+version: "3"
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    volumes:
+    - ./database/mongod.conf:/etc/mongod.conf
+    ports:
+      - "27017:27017"
+    
+  app:
+    container_name: app
+    restart: always
+    build: .
+    environment:
+      - DB_HOST=mongodb://mongo:27017/posts
+    ports:
+      - "80:3000"
+    links:
+      - mongo:4.4
+    command: bash -c "node /usr/src/app/seeds/seed.js && cd /usr/src/app && npm start"
+```
+
+This is a Docker Compose file written in YAML format that defines two services: mongo and app.
+
+The mongo service is based on the official mongo Docker image version 4.4, and is given a container name of mongo. It mounts a local mongod.conf file as a volume inside the container and maps the container port 27017 to the host port 27017.
+
+The app service is built from a local Dockerfile using the build command, and is given a container name of app. It specifies that the container should always be restarted if it exits, and exposes port 3000 in the container as port 80 on the host machine.
+
+It also sets the DB_HOST environment variable to mongodb://mongo:27017/posts, which tells the app service to connect to the mongo service over port 27017.
+
+Finally, it links the mongo service to the app service and runs the seed.js script to populate the database with sample data before starting the npm start command to run the application.
+
+- This composer file must be in the same directory as our docker file and app folder (if not you have to specify the path)
+
+- Once you run docker ` docker compose -f docker-compose.yml` this will create 2 new docker images and place them in containers
+
+```
+Define and run multi-container applications with Docker.
+
+Usage:
+  docker compose [-f <arg>...] [--profile <name>...] [options] [COMMAND] [ARGS...]
+  docker compose -h|--help
+
+Options:
+  -f, --file FILE             Specify an alternate compose file
+                              (default: docker-compose.yml)
+  -p, --project-name NAME     Specify an alternate project name
+                              (default: directory name)
+  --profile NAME              Specify a profile to enable
+  --verbose                   Show more output
+  --log-level LEVEL           DEPRECATED and not working from 2.0 - Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  --no-ansi                   Do not print ANSI control characters
+  -v, --version               Print version and exit
+  -H, --host HOST             Daemon socket to connect to
+
+  --tls                       Use TLS; implied by --tlsverify
+  --tlscacert CA_PATH         Trust certs signed only by this CA
+  --tlscert CLIENT_CERT_PATH  Path to TLS certificate file
+  --tlskey TLS_KEY_PATH       Path to TLS key file
+  --tlsverify                 Use TLS and verify the remote
+  --skip-hostname-check       Don't check the daemon's hostname against the
+                              name specified in the client certificate
+  --project-directory PATH    Specify an alternate working directory
+                              (default: the path of the Compose file)
+  --compatibility             If set, Compose will attempt to convert deploy
+                              keys in v3 files to their non-Swarm equivalent
+
+Commands:
+  build              Build or rebuild services
+  bundle             Generate a Docker bundle from the Compose file
+  config             Validate and view the Compose file
+  create             Create services
+  down               Stop and remove containers, networks, images, and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command
+  images             List images
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pull service images
+  push               Push service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  top                Display the running processes
+  unpause            Unpause services
+  up                 Create and start containers
+  version            Show the Docker Compose version information
+```
